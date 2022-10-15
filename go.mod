@@ -13,6 +13,7 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin v0.36.3
 	go.opentelemetry.io/otel/exporters/jaeger v1.11.0
 	go.opentelemetry.io/otel/sdk v1.11.0
+	xorm.io/builder v0.3.12
 	xorm.io/core v0.7.3
 	xorm.io/xorm v1.3.2
 )
@@ -43,5 +44,4 @@ require (
 	golang.org/x/text v0.3.8 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	xorm.io/builder v0.3.12 // indirect
 )
