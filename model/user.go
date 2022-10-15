@@ -20,16 +20,20 @@ type UserRepository interface {
 }
 
 func NewUserRepository(engine *xorm.Engine) UserRepository {
-	return UserRepositoryDB{
+	if err := engine.Sync(new(User)); err != nil {
+		log.Fatal().Err(err).Msg("failed to sync user table")
+	}
+
+	return userRepositoryDB{
 		e: engine,
 	}
 }
 
-type UserRepositoryDB struct {
+type userRepositoryDB struct {
 	e *xorm.Engine
 }
 
-func (db UserRepositoryDB) GetAllUsers(ctx context.Context) ([]*User, error) {
+func (db userRepositoryDB) GetAllUsers(ctx context.Context) ([]*User, error) {
 	sess := db.e.Context(ctx)
 
 	users := make([]*User, 0)
@@ -37,7 +41,7 @@ func (db UserRepositoryDB) GetAllUsers(ctx context.Context) ([]*User, error) {
 	return users, sess.Find(&users)
 }
 
-func (db UserRepositoryDB) GetUserByID(ctx context.Context, id int64) (*User, error) {
+func (db userRepositoryDB) GetUserByID(ctx context.Context, id int64) (*User, error) {
 	sess := db.e.Context(ctx)
 
 	user := &User{
@@ -51,6 +55,7 @@ func (db UserRepositoryDB) GetUserByID(ctx context.Context, id int64) (*User, er
 	}
 
 	if !has {
+		log.Error().Err(err).Msgf("user not found: [%d]", id)
 		return nil, fmt.Errorf("user not found: [%d]", id)
 	}
 

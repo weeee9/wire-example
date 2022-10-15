@@ -1,7 +1,9 @@
 package model
 
-import "xorm.io/xorm"
+import (
+	_ "github.com/lib/pq"
+)
 
-func NewEngine() (*xorm.Engine, error) {
-	return nil, nil
+var tables = []interface{}{
+	new(User),
 }

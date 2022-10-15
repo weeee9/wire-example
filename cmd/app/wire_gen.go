@@ -7,21 +7,26 @@
 package main
 
 import (
+	"weeee9/wire-example/config"
+	"weeee9/wire-example/middleware/otel-xorm"
 	"weeee9/wire-example/model"
 	"weeee9/wire-example/router"
-	"weeee9/wire-example/service"
+)
+
+import (
+	_ "github.com/joho/godotenv/autoload"
 )
 
 // Injectors from wire.go:
 
-func InitializeApp() (*app, error) {
-	engine, err := model.NewEngine()
+func InitializeApp(cfg config.Config) (*app, error) {
+	hook := otelxorm.NewTracingHook()
+	engine, err := NewEngine(cfg, hook)
 	if err != nil {
 		return nil, err
 	}
 	userRepository := model.NewUserRepository(engine)
-	userService := service.NewUserService(userRepository)
-	userHandler := router.NewUserHandler(userService)
+	userHandler := router.NewUserHandler(userRepository)
 	handler := router.NewRouter(userHandler)
 	mainApp := NewApp(handler)
 	return mainApp, nil

@@ -3,27 +3,27 @@ package router
 import (
 	"net/http"
 	"strconv"
-	"weeee9/wire-example/service"
+	"weeee9/wire-example/model"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserHandler struct {
-	service service.UserService
+	repo model.UserRepository
 }
 
-func NewUserHandler(service service.UserService) UserHandler {
+func NewUserHandler(repo model.UserRepository) UserHandler {
 	return UserHandler{
-		service: service,
+		repo: repo,
 	}
 }
 
 func (h UserHandler) getAllUsers(c *gin.Context) {
-	users, err := h.service.GetAllUsers(c)
+	users, err := h.repo.GetAllUsers(c)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"code":    http.StatusInternalServerError,
-			"message": err,
+			"message": err.Error(),
 		})
 		return
 	}
@@ -41,16 +41,16 @@ func (h UserHandler) getUser(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"code":    http.StatusInternalServerError,
-			"message": err,
+			"message": err.Error(),
 		})
 		return
 	}
 
-	user, err := h.service.GetUserByID(c, id)
+	user, err := h.repo.GetUserByID(c, id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"code":    http.StatusInternalServerError,
-			"message": err,
+			"message": err.Error(),
 		})
 		return
 	}

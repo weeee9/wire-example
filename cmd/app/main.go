@@ -4,17 +4,25 @@ import (
 	"net/http"
 	"time"
 
+	"weeee9/wire-example/config"
+
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	app, err := InitializeApp()
+	cfg, err := config.Environ()
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to init config")
+	}
+
+	app, err := InitializeApp(cfg)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to init app")
 	}
 
 	srv := &http.Server{
-		Addr:              ":8080",
+		Addr:              cfg.Server.Port,
 		Handler:           app.router,
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       5 * time.Minute,

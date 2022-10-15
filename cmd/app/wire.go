@@ -4,18 +4,19 @@
 package main
 
 import (
+	"weeee9/wire-example/config"
+	otelxorm "weeee9/wire-example/middleware/otel-xorm"
 	"weeee9/wire-example/model"
 	"weeee9/wire-example/router"
-	"weeee9/wire-example/service"
 
 	"github.com/google/wire"
 )
 
-func InitializeApp() (*app, error) {
+func InitializeApp(cfg config.Config) (*app, error) {
 	wire.Build(
-		model.NewEngine,
+		otelxorm.NewTracingHook,
+		NewEngine,
 		model.NewUserRepository,
-		service.NewUserService,
 		router.NewUserHandler,
 		router.NewRouter,
 		NewApp,
