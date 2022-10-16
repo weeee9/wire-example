@@ -15,7 +15,7 @@ import (
 func InitializeApp(cfg config.Config) (*app, error) {
 	wire.Build(
 		otelxorm.NewTracingHook,
-		NewEngine,
+		model.NewEngine,
 		model.NewUserRepository,
 		router.NewUserHandler,
 		router.NewRouter,

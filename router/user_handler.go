@@ -19,7 +19,7 @@ func NewUserHandler(repo model.UserRepository) UserHandler {
 }
 
 func (h UserHandler) getAllUsers(c *gin.Context) {
-	users, err := h.repo.GetAllUsers(c)
+	users, err := h.repo.GetAllUsers(c.Request.Context())
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"code":    http.StatusInternalServerError,
@@ -46,7 +46,7 @@ func (h UserHandler) getUser(c *gin.Context) {
 		return
 	}
 
-	user, err := h.repo.GetUserByID(c, id)
+	user, err := h.repo.GetUserByID(c.Request.Context(), id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"code":    http.StatusInternalServerError,

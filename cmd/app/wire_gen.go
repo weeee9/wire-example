@@ -11,9 +11,7 @@ import (
 	"weeee9/wire-example/middleware/otel-xorm"
 	"weeee9/wire-example/model"
 	"weeee9/wire-example/router"
-)
 
-import (
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -21,7 +19,7 @@ import (
 
 func InitializeApp(cfg config.Config) (*app, error) {
 	hook := otelxorm.NewTracingHook()
-	engine, err := NewEngine(cfg, hook)
+	engine, err := model.NewEngine(cfg, hook)
 	if err != nil {
 		return nil, err
 	}
